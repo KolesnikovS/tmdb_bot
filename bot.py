@@ -47,10 +47,12 @@ def send_film_card(message, text, film_no):
 				keyboard = keyboard_last
 			else:
 				keyboard = keyboard_middle
-			url = base_movie_url + str(res.id)
+			url = fsapi_movie_url + str(res.id)
 			photo_text = "*" + str(res.title) + "* \n\n" + \
-					res.overview + "\n\n" + "рейтинг: " + str(res.vote_average)
-			photo_text = photo_text[0:255]
+					res.overview
+			if(len(photo_text)>380:
+				photo_text = photo_text[0:380] + "..."
+			photo_text += "\n\nрейтинг: " + str(res.vote_average)
 			if(res.poster_path):					
 				photo_url = tmdb_photo_url + res.poster_path
 				
