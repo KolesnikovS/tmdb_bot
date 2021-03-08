@@ -50,7 +50,7 @@ def send_film_card(message, text, film_no):
 			url = fsapi_movie_url + str(res.id)
 			photo_text = "*" + str(res.title) + "* \n\n" + \
 					res.overview
-			if(len(photo_text)>380:
+			if(len(photo_text)>380):
 				photo_text = photo_text[0:380] + "..."
 			photo_text += "\n\nрейтинг: " + str(res.vote_average)
 			if(res.poster_path):					
