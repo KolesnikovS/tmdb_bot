@@ -27,18 +27,36 @@ def send_film_card(message, text, film_no):
         if res and res_info:
             film_id = res.id
             url = base_movie_url + str(film_id)
-            genres = []
-            genres_list = res_info.genres
-            for genre in genres_list:
-                genres.append(genre.name)
-            genres = genres[0:4]
-            genres = ",".join(genres)
-            release_date = res.release_date[0:4]
+            try:
+                genres = []
+                genres_list = res_info.genres
+                for genre in genres_list:
+                    genres.append(genre.name)
+                genres = genres[0:4]
+                genres = ",".join(genres)
+            except:
+                genres = ""
+            try:
+                release_date = res.release_date[0:4]
+            except:
+                release_date = ""
             # different keyboards
-            overview = res.overview
-            title = res.title
-            vote_average = res.vote_average
-            runtime = res_info.runtime
+            try:
+                overview = res.overview
+            except:
+                overview = ""
+            try:
+                title = res.title
+            except:
+                title = ""
+            try:
+                vote_average = res.vote_average
+            except:
+                vote_average = ""
+            try:
+                runtime = res_info.runtime
+            except:
+                runtime = ""
             keyboard_first = types.InlineKeyboardMarkup()
             keyboard_last = types.InlineKeyboardMarkup()
             keyboard_middle = types.InlineKeyboardMarkup()
@@ -113,8 +131,11 @@ def film_card(call):
     film_no = int(call_data[-1])
     del call_data[-1]
     text = " ".join(call_data)
-    send_film_card(call.message, text, film_no)
-    bot.delete_message(call.message.chat.id, call.message.message_id)
+    try:
+        send_film_card(call.message, text, film_no)
+        bot.delete_message(call.message.chat.id, call.message.message_id)
+    except:
+        print("Card Error")
 
 
 if __name__ == "__main__":
