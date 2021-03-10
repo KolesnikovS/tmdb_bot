@@ -84,9 +84,9 @@ def send_film_card(message, text, film_no):
             if vote_average:
                 photo_text += "\n\n*Рейтинг:* " + str(res.vote_average)
             if release_date:
-                photo_text += "\n\n* Год: *" + release_date
+                photo_text += "\n\n*Год: *" + release_date
             if genres:
-                photo_text += "\n\n *Жанры:* " + genres + "\n\n"
+                photo_text += "\n\n*Жанры:* " + genres + "\n\n"
             if runtime:
                 photo_text += "*Продолжительность:* " + str(runtime) + " мин.\n\n"
             if overview:
