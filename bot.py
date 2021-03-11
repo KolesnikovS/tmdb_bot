@@ -105,7 +105,10 @@ def send_film_card(message, text, film_no):
                 bot.send_message(chat_id, photo_text, reply_markup=keyboard, parse_mode="Markdown")
 
     else:
-        bot.send_message(chat_id, "Ничего не нашлось")
+        keyboard = types.InlineKeyboardMarkup()
+        item_tv = types.InlineKeyboardButton(text='🔍 сериал', callback_data="tv " + text + ' 0')
+        keyboard.add(item_tv)
+        bot.send_message(chat_id, "Ничего не нашлось", reply_markup=keyboard)
 
 
 # tv card
@@ -217,16 +220,16 @@ def send_season_card(message, tv_id):
             seasons_list = []
             keyboard = types.InlineKeyboardMarkup()
             item = []
-            for index in range(len(seasons) - 1):
+            for index in range(len(seasons)):
                 season_no = index + 1
-                episodes_count = seasons[index+1].episode_count
                 for i in range(len(seasons)):
-                    print("HERE")
+                    # print("HERE")
+                    episodes_count = seasons[i].episode_count
                     if int(seasons[i].season_number) == season_no:
                         season_title = str(seasons[i].name)
                         callback_text = "episodes " + title + ' ' + str(season_no) + ' '\
                                         + str(episodes_count) + ' ' + str(tv_id)
-                        item.append(types.InlineKeyboardButton(text=season_title, callback_data=callback_text))
+                        item.append(types.InlineKeyboardButton(text=str(season_no) + '. ' + season_title, callback_data=callback_text))
                         keyboard.add(item[index])
             bot.send_message(chat_id, text="*Смотреть* " + str(title), reply_markup=keyboard, parse_mode="Markdown")
         except Exception as e:
@@ -269,7 +272,10 @@ def handle_text_photo(message):
         film_no = 0
         send_film_card(message, text, film_no)
     else:
-        bot.send_message(chat_id, "Ничего не нашлось")
+        keyboard = types.InlineKeyboardMarkup()
+        item_tv = types.InlineKeyboardButton(text='🔍 сериал', callback_data="tv " + text + ' 0')
+        keyboard.add(item_tv)
+        bot.send_message(chat_id, "Ничего не нашлось", reply_markup=keyboard)
 
 
 # Конкретный фильм
@@ -329,5 +335,4 @@ def film_card(call):
 
 if __name__ == "__main__":
     bot.infinity_polling()
-
 
