@@ -116,8 +116,6 @@ def send_tv_card(message, text, tv_no):
     if search:
         res = search[tv_no]
         res = (tv.details(res.id))
-        print("\n\n res = ")
-        print(res)
         if res:
             tv_id = res.id
             url = base_tv_url + str(tv_id)
@@ -158,8 +156,6 @@ def send_tv_card(message, text, tv_no):
                 print(e)
                 runtime = ""
                 err("runtime")
-            print("\n" + str(title) + ", \n" + str(vote_average) + ", \n" + str(release_date) + ", \n" + \
-                  str(genres) + "\n" + str(runtime) + ", \n" + str(overview))
             keyboard_first = types.InlineKeyboardMarkup()
             keyboard_last = types.InlineKeyboardMarkup()
             keyboard_middle: InlineKeyboardMarkup = types.InlineKeyboardMarkup()
@@ -221,14 +217,18 @@ def send_season_card(message, tv_id):
             seasons_list = []
             keyboard = types.InlineKeyboardMarkup()
             item = []
-            for index, season in enumerate(seasons):
-                season_no = str(index + 1)
-                episodes_count = str(season.episode_count)
-                season_title = str(res.seasons[index].name)
-                callback_text = "episodes " + title + ' ' + str(season_no) + ' ' + str(episodes_count) + ' ' + str(tv_id)
-                item.append(types.InlineKeyboardButton(text=season_title, callback_data=callback_text))
-                keyboard.add(item[index])
-            bot.send_message(chat_id, "*Смотреть* " + str(title), reply_markup=keyboard, parse_mode="Markdown")
+            for index in range(len(seasons) - 1):
+                season_no = index + 1
+                episodes_count = seasons[index+1].episode_count
+                for i in range(len(seasons)):
+                    print("HERE")
+                    if int(seasons[i].season_number) == season_no:
+                        season_title = str(seasons[i].name)
+                        callback_text = "episodes " + title + ' ' + str(season_no) + ' '\
+                                        + str(episodes_count) + ' ' + str(tv_id)
+                        item.append(types.InlineKeyboardButton(text=season_title, callback_data=callback_text))
+                        keyboard.add(item[index])
+            bot.send_message(chat_id, text="*Смотреть* " + str(title), reply_markup=keyboard, parse_mode="Markdown")
         except Exception as e:
             print(e)
             err("seasons")
@@ -243,7 +243,7 @@ def send_episode_card(message, title, season_no, episodes_count, tv_id):
         item.append(types.InlineKeyboardButton(text="Выбрать сезон", callback_data="delseasons "+str(tv_id)))
         keyboard.add(item[0])
         for episode_no in range(episodes_count):
-            episode_url = base_movie_url + str(tv_id) + '-' + str(season_no) + '-' + str(episode_no)
+            episode_url = base_tv_url + str(tv_id) + '-' + str(season_no) + '-' + str(episode_no + 1)
             item.append(types.InlineKeyboardButton(text="Серия " + str(episode_no + 1), url=episode_url))
             keyboard.add(item[episode_no+1])
         bot.send_message(chat_id, "*Смотреть* " + title + '\n*Сезон* ' + str(season_no), reply_markup=keyboard, parse_mode="Markdown")
@@ -329,4 +329,5 @@ def film_card(call):
 
 if __name__ == "__main__":
     bot.infinity_polling()
+
 
