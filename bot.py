@@ -265,7 +265,7 @@ def start(message):
 @bot.message_handler(func=lambda m: True)
 def handle_text_photo(message):
     chat_id = message.chat.id
-    text = message.text
+    text = message.text[0:48]
     movie = Movie()
     search = movie.search(text)
     if search:
